@@ -4,9 +4,9 @@ import ImagePreview from "@/components/ImagePreview";
 import MasonryGrid from "@/components/MasonryGrid";
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     type: string;
-  };
+  }>;
 }
 
 const categoryTitles: { [key: string]: string } = {
@@ -56,8 +56,6 @@ const sampleImages = [
     height: 500,
   },
   {
-
-    
     src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=800&h=900",
     alt: "示例图片 6",
     width: 800,
