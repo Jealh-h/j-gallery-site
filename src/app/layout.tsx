@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AnimatePresence } from "framer-motion";
+import { ThemeProvider } from "next-themes";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +20,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AnimatePresence mode="wait">{children}</AnimatePresence>
+        <ThemeProvider
+          defaultTheme="system"
+          enableSystem={true}
+          attribute="class"
+        >
+          {/* 添加全局导航栏 */}
+          <header className="p-4 flex justify-end items-center">
+            <ThemeToggle />
+          </header>
+          <AnimatePresence mode="wait">{children}</AnimatePresence>
+        </ThemeProvider>
       </body>
     </html>
   );

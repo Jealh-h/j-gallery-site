@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // 添加useEffect导入
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -19,6 +19,22 @@ export default function ImagePreview({
 }: ImagePreviewProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  // 添加滚动控制逻辑
+  useEffect(() => {
+    if (isOpen) {
+      // 模态框打开时禁止body滚动
+      document.body.style.overflow = "hidden";
+    } else {
+      // 模态框关闭时恢复body滚动
+      document.body.style.overflow = "auto";
+    }
+
+    // 组件卸载时确保恢复滚动
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   return (
     <>
       <div
@@ -32,9 +48,6 @@ export default function ImagePreview({
           height={height}
           className="w-full h-auto object-cover transition-transform duration-300 hover:scale-105"
         />
-        {/* <div
-          className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300"
-        /> */}
       </div>
 
       {/* 预览模态框 */}
@@ -53,20 +66,23 @@ export default function ImagePreview({
             className="relative max-h-[90vh] max-w-[90vw]"
             onClick={(e) => e.stopPropagation()}
           >
-            <Image
-              src={src}
-              alt={alt}
-              width={width * 2}
-              height={height * 2}
-              className="object-contain"
-            />
-            <button
-              className="absolute -top-10 right-0 text-white text-2xl hover:text-gray-300"
-              onClick={() => setIsOpen(false)}
-            >
-              ✕
-            </button>
+            <div className="relative h-[80vh] mx-auto">
+              <Image
+                src={src}
+                alt={alt}
+                width={width}
+                height={height}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+                className="h-full w-auto object-contain"
+              />
+            </div>
           </motion.div>
+          <button
+            className="absolute top-10 right-10 text-white text-2xl hover:text-gray-300"
+            onClick={() => setIsOpen(false)}
+          >
+            ✕
+          </button>
         </motion.div>
       )}
     </>
